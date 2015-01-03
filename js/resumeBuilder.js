@@ -26,17 +26,41 @@ var work = {
       "dates": "october 2013 -",
       "location": "Moscow",
       "description": "Develop desktop client for Cloud@Mail.ru"
+    },
+    {
+      "title": "C programmer",
+      "employer": "Sukhoi design beureau",
+      "dates": "october 2010 - april 2011",
+      "location": "Moscow",
+      "description": "Develop low-level applications for aircraft monitoring devices"
     }
   ]
 };
 
-var projects = [
+var projects = {
+  "list": [
     {
       "title": "Prediction of aircraft fuel consumption using neural networks",
       "dates": "january 2013 - june 2013",
       "description": "Research of predicting of aircraft fuel consumption using technics based on real-time neural networks",
+      "picture": "images/tdnn.jpg"
     }
-];
+  ]
+};
+
+projects.display = function() {
+  for (proj in projects.list) {
+    var formattedProjectTitle = HTMLprojectTitle.replace("%data%", projects.list[proj].title);
+    var formattedProjectDates = HTMLprojectDates.replace("%data%", projects.list[proj].dates);
+    var formattedProjectDescription = HTMLprojectDescription.replace("%data%", projects.list[proj].description);
+    var formattedProjectImage = HTMLprojectImage.replace("%data%", projects.list[proj].picture);
+    $("#projects").append(HTMLprojectStart);
+    $(".project-entry:last").append(formattedProjectTitle);
+    $(".project-entry:last").append(formattedProjectDates);
+    $(".project-entry:last").append(formattedProjectDescription);
+    $(".project-entry:last").append(formattedProjectImage);
+  }
+};
 
 var education = {
   "schools": [ 
@@ -71,7 +95,7 @@ education["city"] = "Moscow";
 // Name and role
 var formattedName = HTMLheaderName.replace("%data%", name);
 var formattedRole = HTMLheaderRole.replace("%data%", role);
-$("#header").prepend(formattedName);
+$("#name").append(formattedName);
 $("#header").prepend(formattedRole);
 
 // Contacts
@@ -112,26 +136,38 @@ if (bio.skills.length > 0) {
 }
 
 // Work experience
-var formattedPosition = HTMLworkTitle.replace("%data%", work.jobs[0].title);
-var formattedWorkEmployer = HTMLworkEmployer.replace("%data%", work.jobs[0].employer);
-var formattedWorkDates = HTMLworkDates.replace("%data%", work.jobs[0].dates);
-var formattedWorkLocation = HTMLworkLocation.replace("%data%", work.jobs[0].location);
-var formattedWorkDescription = HTMLworkDescription.replace("%data%", work.jobs[0].description);
-$("#workExperience").append(HTMLworkStart);
-$("#workExperience").append(formattedPosition);
-$("#workExperience").append(formattedWorkEmployer);
-$("#workExperience").append(formattedWorkDates);
-$("#workExperience").append(formattedWorkLocation);
-$("#workExperience").append(formattedWorkDescription);
+function appendWorkExperience() {
+  for (job in work.jobs) {
+    $("#workExperience").append(HTMLworkStart);
+    var formattedWorkEmployer = HTMLworkEmployer.replace("%data%", work.jobs[job].employer);
+    var formattedPosition = HTMLworkTitle.replace("%data%", work.jobs[job].title);
+    var formattedWorkDates = HTMLworkDates.replace("%data%", work.jobs[job].dates);
+    var formattedWorkLocation = HTMLworkLocation.replace("%data%", work.jobs[job].location);
+    var formattedWorkDescription = HTMLworkDescription.replace("%data%", work.jobs[job].description);
+    $(".work-entry:last").append(formattedWorkEmployer + formattedPosition);
+    $(".work-entry:last").append(formattedWorkDates);
+    $(".work-entry:last").append(formattedWorkLocation);
+    $(".work-entry:last").append(formattedWorkDescription);
+  }
+}
+
+appendWorkExperience();
+$(document).click(function(loc) {
+  logClicks(loc.clientX, loc.clientY);
+});
+
+$("#main").append(internationalizeButton);
+
+function inName(name) {
+  var chAr = name.trim().split(' ');
+  chAr[0][0].toUpperCase();
+  chAr[1].toUpperCase();
+  
+  return chAr.join(' ');
+}
 
 // Projects
-var formattedProjectTitle = HTMLprojectTitle.replace("%data%", projects[0].title);
-var formattedProjectDates = HTMLprojectDates.replace("%data%", projects[0].dates);
-var formattedProjectDescription = HTMLprojectDescription.replace("%data%", projects[0].description);
-$("#projects").append(HTMLprojectStart);
-$("#projects").append(formattedProjectTitle);
-$("#projects").append(formattedProjectDates);
-$("#projects").append(formattedProjectDescription);
+projects.display();
 
 // Education
 var formattedSchoolName = HTMLschoolName.replace("%data%", education["schools"][0].name);
